@@ -1,0 +1,15 @@
+options:
+  env:
+    - DOCKER_BUILDKIT=1
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args: ['-c', 'docker pull $HELLO:latest || exit 0']
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+            'build',
+            '-t', '$HELLO:latest',
+            '-f', 'Dockerfile',
+            '--cache-from', '$HELLO:latest',
+            '.'
+      ]
