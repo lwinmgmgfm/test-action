@@ -38,7 +38,7 @@ jobs:
               chOne=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir/file.txt)
           fi
           
-          if [ $chOne = '' ]
+          if [ -z "${chOne}" ]
           then
           echo "No Var"
           else
@@ -50,7 +50,7 @@ jobs:
           else
               chTwo=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir)
           fi
-          if [ $chTwo = '' ]
+          if [ -z "${chTwo}" ]
           then
           echo "No Var"
           else
@@ -63,7 +63,7 @@ jobs:
               chThree=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} .)
           fi
           chThree="ABC"
-          if [ $chThree = '' ]
+          if [ -z "${chThree}" ]
           then
           echo "No Var"
           else
