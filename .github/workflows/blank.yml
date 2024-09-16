@@ -25,14 +25,19 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: ${{ github.event_name == 'pull_request' && 2 || 0 }}
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
           ls -ahl
           echo "1"
-          chOne=$(git diff --name-only HEAD^ HEAD change-dir/file.txt)
+          if ${{ github.event_name == 'pull_request' }}; then
+              chOne=$(git diff --name-only HEAD^ HEAD change-dir/file.txt)
+          else
+              chOne=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir/file.txt)"
+          fi
+          
           if [ -z ${chOne+x} ]
           then
           echo "exist $chOne"
@@ -40,7 +45,11 @@ jobs:
           echo "No Var"
           fi
           echo "2"
-          chTwo=$(git diff --name-only HEAD^ HEAD change-dir)
+          if ${{ github.event_name == 'pull_request' }}; then
+              chTwo=$(git diff --name-only HEAD^ HEAD change-dir)
+          else
+              chTwo=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir)"
+          fi
           if [ -z ${chTwo+x} ]
           then
           echo "exist $chTwo"
@@ -48,7 +57,11 @@ jobs:
           echo "No Var"
           fi
           echo "3"
-          chThree=$(git diff --name-only HEAD^ HEAD .)
+          if ${{ github.event_name == 'pull_request' }}; then
+              chThree=$(git diff --name-only HEAD^ HEAD .)
+          else
+              chThree=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} .)"
+          fi
           if [ -z ${chThree+x} ]
           then
           echo "exist $chThree"
