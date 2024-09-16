@@ -73,5 +73,6 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v2'
       - name: 'Run'
         run: |
+          gcloud config set project "My Project One"
           gcloud builds submit --config ./cloudbuild.yaml
         working-directory: change-dir
