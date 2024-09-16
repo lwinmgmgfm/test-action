@@ -31,7 +31,7 @@ jobs:
       - name: Run a one-line script
         run: |
           ls -ahl
-          echo $(git diff --name-only HEAD^ HEAD file.txt)
+          echo $(git diff --name-only HEAD^ HEAD change-dir/file.txt)
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
