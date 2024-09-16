@@ -32,11 +32,29 @@ jobs:
         run: |
           ls -ahl
           echo "1"
-          echo $(git diff --name-only HEAD^ HEAD change-dir/file.txt)
+          chOne=$(git diff --name-only HEAD^ HEAD change-dir/file.txt)
+          if [ -z ${chOne+x} ]
+          then
+          echo "exist $chOne"
+          else
+          echo "No Var"
+          fi
           echo "2"
-          echo $(git diff --name-only HEAD^ HEAD change-dir)
+          chTwo=$(git diff --name-only HEAD^ HEAD change-dir)
+          if [ -z ${chTwo+x} ]
+          then
+          echo "exist $chTwo"
+          else
+          echo "No Var"
+          fi
           echo "3"
-          echo $(git diff --name-only HEAD^ HEAD .)
+          chThree=$(git diff --name-only HEAD^ HEAD .)
+          if [ -z ${chThree+x} ]
+          then
+          echo "exist $chThree"
+          else
+          echo "No Var"
+          fi
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
