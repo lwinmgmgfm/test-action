@@ -34,7 +34,7 @@ jobs:
           ls -ahl
           echo "1"
           if ${{ github.event_name == 'pull_request' }}; then
-              
+              chOne=$(git diff --name-only HEAD^ HEAD change-dir/file.txt)
           else
               chOne=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir/file.txt)
           fi
