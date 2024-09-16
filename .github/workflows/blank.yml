@@ -35,7 +35,7 @@ jobs:
           if ${{ github.event_name == 'pull_request' }}; then
               chOne=$(git diff --name-only HEAD^ HEAD change-dir/file.txt)
           else
-              chOne=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir/file.txt)"
+              chOne=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir/file.txt)
           fi
           
           if [ -z ${chOne+x} ]
@@ -48,7 +48,7 @@ jobs:
           if ${{ github.event_name == 'pull_request' }}; then
               chTwo=$(git diff --name-only HEAD^ HEAD change-dir)
           else
-              chTwo=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir)"
+              chTwo=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir)
           fi
           if [ -z ${chTwo+x} ]
           then
@@ -60,7 +60,7 @@ jobs:
           if ${{ github.event_name == 'pull_request' }}; then
               chThree=$(git diff --name-only HEAD^ HEAD .)
           else
-              chThree=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} .)"
+              chThree=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} .)
           fi
           if [ -z ${chThree+x} ]
           then
