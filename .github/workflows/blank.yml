@@ -56,14 +56,3 @@ jobs:
           else
           echo "exist $chThree"
           fi
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0'
-        with:
-          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
-      - name: 'Run'
-        run: |
-          gcloud builds submit --config ./cloudbuild.yaml
-        working-directory: change-dir
