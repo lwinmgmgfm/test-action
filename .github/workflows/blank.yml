@@ -33,7 +33,12 @@ jobs:
         run: |
           ls -ahl
           echo "1"
-          chOne=$(git diff --name-only HEAD^ HEAD change-dir/file.txt)
+          if ${{ github.event_name == 'pull_request' }}; then
+              
+          else
+              chOne=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir/file.txt)
+          fi
+          
           if [ -z "${chOne}" ]
           then
           echo "No Var"
@@ -41,7 +46,11 @@ jobs:
           echo "exist $chOne"
           fi
           echo "2"
-          chTwo=$(git diff --name-only HEAD^ HEAD change-dir/file.txt)
+          if ${{ github.event_name == 'pull_request' }}; then
+              chTwo=$(git diff --name-only HEAD^ HEAD change-dir)
+          else
+              chTwo=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir)
+          fi
           if [ -z "${chTwo}" ]
           then
           echo "No Var"
@@ -49,7 +58,11 @@ jobs:
           echo "exist $chTwo"
           fi
           echo "3"
-          chThree=$(git diff --name-only HEAD^ HEAD change-dir/file.txt)
+          if ${{ github.event_name == 'pull_request' }}; then
+              chThree=$(git diff --name-only HEAD^ HEAD .)
+          else
+              chThree=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} .)
+          fi
           if [ -z "${chThree}" ]
           then
           echo "No Var"
