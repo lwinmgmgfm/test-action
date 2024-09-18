@@ -62,7 +62,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    depends:
+    needs:
       - check
     env:
       IS_FILE_CHANGED: ${{needs.check.outputs.checkFile}}
