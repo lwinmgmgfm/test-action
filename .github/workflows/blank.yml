@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - check
-    if: ${{needs.check.outputs.checkDir}} == "yes"ß
+    if: ${{needs.check.checkDir}} == "yes"ß
     env:
       IS_FILE_CHANGED: ${{needs.check.outputs.checkFile}}
       IS_DIR_CHANGED: ${{needs.check.outputs.checkDir}}
