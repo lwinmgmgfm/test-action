@@ -17,55 +17,67 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  check:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    outputs:
+      checkFile: ${{ steps.check1.outputs.isUpdated }}
+      checkDir: ${{ steps.check2.outputs.isUpdated }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
+      - id: check1
+        name: Checking Changes in package.json
+        run: |
+          if ${{ github.event_name == 'pull_request' }}
+            then
+              isChanged=$(git diff --name-only HEAD^ HEAD change-dir/file.txt)
+            else
+              isChanged=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir/file.txt)
+          fi
+          if [ -z "${isChanged}" ]
+            then
+              isUpdated=no
+            else
+              isUpdated=yes
+          fi
+
+      - id: check2
+        name: Checking Changes in server directory
+        run: |
+          if ${{ github.event_name == 'pull_request' }}
+            then
+              isChanged=$(git diff --name-only HEAD^ HEAD change-dir/)
+            else
+              isChanged=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir/)
+          fi
+          if [ -z "${isChanged}" ]
+            then
+              isUpdated=no
+            else
+              isUpdated=yes
+          fi
+  
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    depends:
+      - check
+    env:
+      IS_FILE_CHANGED: ${{needs.check.outputs.checkFile}}
+      IS_DIR_CHANGED: ${{needs.check.outputs.checkDir}}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+        name: Git Check Out
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
-          ls -ahl
-          echo "1"
-          if ${{ github.event_name == 'pull_request' }}; then
-              chOne=$(git diff --name-only HEAD^ HEAD change-dir/file.txt)
-          else
-              chOne=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir/file.txt)
-          fi
-          
-          if [ -z "${chOne}" ]
-          then
-          echo "No Var"
-          else
-          echo "exist $chOne"
-          fi
-          echo "2"
-          if ${{ github.event_name == 'pull_request' }}; then
-              chTwo=$(git diff --name-only HEAD^ HEAD change-dir)
-          else
-              chTwo=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} change-dir)
-          fi
-          if [ -z "${chTwo}" ]
-          then
-          echo "No Var"
-          else
-          echo "exist $chTwo"
-          fi
-          echo "3"
-          if ${{ github.event_name == 'pull_request' }}; then
-              chThree=$(git diff --name-only HEAD^ HEAD .)
-          else
-              chThree=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} .)
-          fi
-          if [ -z "${chThree}" ]
-          then
-          echo "No Var"
-          else
-          echo "exist $chThree"
-          fi
+          echo "FILE"
+          echo $IS_FILE_CHANGED
+          echo "DIR"
+          echo $IS_DIR_CHANGED
