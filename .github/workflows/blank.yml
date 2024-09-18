@@ -79,5 +79,7 @@ jobs:
         run: |
           echo "FILE"
           echo $IS_FILE_CHANGED
+          echo ${{ needs.check.outputs.checkFile }}
           echo "DIR"
           echo $IS_DIR_CHANGED
+          echo ${{ needs.check.outputs.checkDir }}
