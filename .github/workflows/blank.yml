@@ -54,9 +54,9 @@ jobs:
           fi
           if [ -z "${isChanged}" ]
             then
-              isUpdated=no
+              echo "isUpdated=no" >> "$GITHUB_OUTPUT"
             else
-              isUpdated=yes
+              echo "isUpdated=yes" >> "$GITHUB_OUTPUT"
           fi
   
   build:
